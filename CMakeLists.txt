@@ -57,16 +57,21 @@ elseif(MSVC)
     target_link_libraries(xtypes INTERFACE Dbghelp.lib)
 endif()
 
-# Download the cpp-peglib header file needed
-file(DOWNLOAD
-        https://raw.githubusercontent.com/yhirose/cpp-peglib/${XTYPES_PEGLIB_VERSION}/peglib.h
-        ${PROJECT_BINARY_DIR}/thirdparty/cpp-peglib/peglib.h
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cpp-peglib")
+    set(XTYPES_CPP_PEGLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cpp-peglib)
+else ()
+    set(XTYPES_CPP_PEGLIB_INCLUDE_DIR ${PROJECT_BINARY_DIR}/thirdparty/cpp-peglib)
+    # Download the cpp-peglib header file needed
+    file(DOWNLOAD
+            https://raw.githubusercontent.com/yhirose/cpp-peglib/${XTYPES_PEGLIB_VERSION}/peglib.h
+            ${PROJECT_BINARY_DIR}/thirdparty/cpp-peglib/peglib.h
     )
+endif ()
 
 target_include_directories(xtypes
     INTERFACE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/thirdparty/cpp-peglib>
+        $<BUILD_INTERFACE:${XTYPES_CPP_PEGLIB_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
         $<INSTALL_INTERFACE:thirdparty/cpp-peglib/include>
     )
