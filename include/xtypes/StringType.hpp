@@ -158,7 +158,8 @@ public:
 
     virtual void for_each_type(
             const TypeNode& node,
-            TypeVisitor visitor) const override
+            TypeVisitor visitor,
+            bool preorder=true) const override
     {
         visitor(node);
     }

@@ -436,14 +436,22 @@ public:
 
     virtual void for_each_type(
             const TypeNode& node,
-            TypeVisitor visitor) const override
+            TypeVisitor visitor,
+            bool preorder=true) const override
     {
-        visitor(node);
+        if(preorder)
+        {
+            visitor(node);
+        }
         for (size_t i = 0; i < members().size(); i++)
         {
             const Member& member = members()[i];
             TypeNode child(node, member.type(), i, &member);
-            member.type().for_each_type(child, visitor);
+            member.type().for_each_type(child, visitor, preorder);
+        }
+        if(!preorder)
+        {
+            visitor(node);
         }
     }
 

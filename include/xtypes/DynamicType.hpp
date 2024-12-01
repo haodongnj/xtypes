@@ -177,18 +177,20 @@ public:
     /// \param[in] visitor Function called each time a new node in the tree is visited.
     virtual void for_each_type(
             const TypeNode& node,
-            TypeVisitor visitor) const = 0;
+            TypeVisitor visitor,
+            bool preorder=true) const = 0;
 
     /// \brief Iterate the DynamicType in deep. Each node visited will call to the user visitor function.
     /// \param[in] visitor User visitor function.
     /// \returns true if no exceptions by the user were throw. Otherwise, the user boolean exception value.
     bool for_each(
-            TypeVisitor visitor) const
+            TypeVisitor visitor,
+            bool preorder=true) const
     {
         TypeNode root(*this);
         try
         {
-            for_each_type(root, visitor);
+            for_each_type(root, visitor, preorder);
             return true;
         }
         catch (bool value){ return value; }

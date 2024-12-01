@@ -210,11 +210,19 @@ public:
 
     virtual void for_each_type(
             const TypeNode& node,
-            TypeVisitor visitor) const override
+            TypeVisitor visitor,
+            bool preorder=true) const override
     {
-        visitor(node);
+        if(preorder)
+        {
+            visitor(node);
+        }
         TypeNode child(node, content_type(), 0, nullptr);
-        content_type().for_each_type(child, visitor);
+        content_type().for_each_type(child, visitor, preorder);
+        if(!preorder)
+        {
+            visitor(node);
+        }
     }
 
     /// \brief Push a value to a map instance.

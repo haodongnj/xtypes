@@ -175,7 +175,8 @@ public:
 
     void for_each_type(
             const TypeNode& node,
-            TypeVisitor visitor) const override
+            TypeVisitor visitor,
+            bool preorder=true) const override
     {
         visitor(node);
         Member* from_member = nullptr;
@@ -188,9 +189,9 @@ public:
             from_member = const_cast<Member*>(node.parent().from_member());
         }
         TypeNode f(node, first(), 0, from_member);
-        first_->for_each_type(f, visitor);
+        first_->for_each_type(f, visitor, preorder);
         TypeNode s(node, second(), 1, from_member);
-        second_->for_each_type(s, visitor);
+        second_->for_each_type(s, visitor, preorder);
     }
 
     void for_each_instance(
